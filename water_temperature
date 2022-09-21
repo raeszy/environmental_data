@@ -1,0 +1,16 @@
+# environmental_data
+# water_temperature
+
+library(tidyverse)
+library(lubridate)
+
+file.choose()
+
+h2o_t <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/waterT_S1.csv")
+
+h2o_t_transformed <- data.frame("time"= ymd_hms(h2o_t$Time),
+                                "water_temperature" = h2o_t$Stack.2.Sump)%>%
+  mutate(water_temperature = as.numeric(gsub("°F", "", water_temperature)),
+         sensor = "Stack.2.Sump")
+mean_h2o_t <- mean(h2o_t_transformed$water_temperature, na.rm = TRUE)
+sd_h2o_t <- sd(h2o_t_transformed$water_temperature, na.rm = TRUE)
