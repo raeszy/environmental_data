@@ -1,0 +1,43 @@
+# environmnetal_data 
+# vpd
+
+library(tidyverse)
+library(lubridate)
+
+file.choose()
+
+vpd_S1 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/vpd_S1.csv")
+vpd_S2 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/vpd_S2.csv")
+vpd_S3 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/vpd_S3.csv")
+vpd_S4 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/vpd_S4.csv")
+vpd_S5 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/vpd_S5.csv")
+
+vpd_S1_transformed <- data.frame("time" = ymd_hms(vpd_S1$Time),
+                                 "vpd" = vpd_S1$S2.PE2.LI.B1)%>%
+  mutate(vpd = as.numeric(gsub("kPa", "", vpd)),
+         sensor = "S2.PE2.LI.B1")
+
+vpd_S2_transformed <- data.frame("time" = ymd_hms(vpd_S2$Time),
+                                 "vpd" = vpd_S2$S2.PE2.LI.B3)%>%
+  mutate(vpd = as.numeric(gsub("kPa", "", vpd)),
+          sensor = "S2.PE2.LI.B3")
+
+vpd_S3_transformed <- data.frame("time" = ymd_hms(vpd_S3$Time),
+                                 "vpd" = vpd_S3$S2.PE2.LO.B1)%>%
+  mutate(vpd = as.numeric(gsub("kPa", "", vpd)),
+         sensor = "S2.PE2.LO.B1")
+
+vpd_S4_transformed <- data.frame("time" = ymd_hms(vpd_S4$Time),
+                                 "vpd" = vpd_S4$S2.PE2.LO.B3)%>%
+  mutate(vpd = as.numeric(gsub("kPa", "", vpd)),
+         sensor = "S2.PE2.LO.B3")
+
+vpd_S5_transformed <- data.frame("time" = ymd_hms(vpd_S5$Time),
+                                 "vpd" = vpd_S5$S2.PE2.LO.B5)%>%
+  mutate(vpd = as.numeric(gsub("kPa", "", vpd)),
+         sensor = "S2.PE2.LO.B5")
+
+merge.data.vpd <- rbind(vpd_S1_transformed, vpd_S2_transformed, vpd_S3_transformed, vpd_S4_transformed, vpd_S5_transformed)
+
+mean_vpd <- mean(merge.data.vpd$vpd, na.rm = TRUE)
+sd_vpd <- sd(merge.data.vpd$vpd, na.rm = TRUE)
