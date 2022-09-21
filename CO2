@@ -1,0 +1,17 @@
+# environmental_data
+# CO2
+
+library(tidyverse)
+library(lubridate)
+
+file.choose()
+
+co2_S1 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/co2_S1.csv")
+
+co2_S1_transformed <- data.frame("time" = ymd_hms(co2_S1$Time),
+                                 "ppm" = co2_S1$S2.PE2.LO.B3)%>%
+  mutate(ppm = as.numeric(gsub("ppm", "", ppm)),
+         sensor = "S2.PE2.LO.B3")
+
+mean_co2 <- mean(co2_S1_transformed$ppm, na.rm = TRUE)
+sd_co2 <- sd(co2_S1_transformed$ppm, na.rm = TRUE)
