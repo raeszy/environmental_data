@@ -1,0 +1,44 @@
+# environmental_data
+R Code library for analyzing sensor data for Environmental Data projects
+# air_temperature 
+
+library(tidyverse)
+library(lubridate)
+
+file.choose()
+
+airT_S1 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/airT_S1.csv")
+airT_S2 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/airT_S2.csv")
+airT_S3 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/airT_S3.csv")
+airT_S4 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/airT_S4.csv")
+airT_S5 <- read_csv("/Users/farmops/Desktop/R/env_data_bro_fr/airT_S5.csv")
+
+airT_S1_transformed <- data.frame("time" = ymd_hms(airT_S1$Time),
+                                "air_temperature" = airT_S1$S2.PE2.LI.B1)%>%
+  mutate(air_temperature = as.numeric(gsub("°F", "", air_temperature)),
+         sensor = "S2.PE2.LI.B1")
+
+airT_S2_transformed <- data.frame("time" = ymd_hms(airT_S2$Time),
+                                  "air_temperature" = airT_S2$S2.PE2.LI.B3)%>%
+  mutate(air_temperature = as.numeric(gsub("°F", "", air_temperature)),
+         sensor = "S2.PE2.LI.B3")
+
+airT_S3_transformed <- data.frame("time" = ymd_hms(airT_S3$Time),
+                                  "air_temperature" = airT_S3$S2.PE2.LO.B1)%>%
+  mutate(air_temperature = as.numeric(gsub("°F", "", air_temperature)),
+         sensor = "S2.PE2.LO.B1")
+
+airT_S4_transformed <- data.frame("time" = ymd_hms(airT_S4$Time),
+                                  "air_temperature" = airT_S4$S2.PE2.LO.B3)%>%
+  mutate(air_temperature = as.numeric(gsub("°F", "", air_temperature)),
+         sensor = "S2.PE2.LO.B3")
+
+airT_S5_transformed <- data.frame("time" = ymd_hms(airT_S5$Time),
+                                  "air_temperature" = airT_S5$S2.PE2.LO.B5)%>%
+  mutate(air_temperature = as.numeric(gsub("°F", "", air_temperature)),
+         sensor = "S2.PE2.LO.B5")
+merge.data.airT <- rbind(airT_S1_transformed , airT_S2_transformed , airT_S3_transformed , airT_S4_transformed)
+
+
+mean_airT <- mean(merge.data.airT$air_temperature, na.rm = TRUE)
+sd_airT <- sd(merge.data.airT$air_temperature, na.rm = TRUE)
