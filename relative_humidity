@@ -1,0 +1,43 @@
+# environmental_data
+# relative_humidity = rh 
+
+library(tidyverse)
+library(lubridate)
+
+file.choose()
+
+rh_S1 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/rh_S1.csv")
+rh_S2 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/rh_S2.csv")
+rh_S3 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/rh_S3.csv")
+rh_S4 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/rh_S4.csv")
+rh_S5 <- read.csv("/Users/farmops/Desktop/R/env_data_bro_fr/rh_S5.csv")
+
+rh_S1_transformed <- data.frame("time" = ymd_hms(rh_S1$Time),
+                                "rh" = rh_S1$S2.PE2.LI.B1) %>%
+  mutate(rh = as.numeric(gsub("%", "", rh)),
+         sensor = "S2.PE2.LI.B1")
+
+rh_S2_transformed <- data.frame("time" = ymd_hms(rh_S2$Time),
+                                "rh" = rh_S2$S2.PE2.LI.B3) %>%
+  mutate(rh = as.numeric(gsub("%", "", rh)),
+         sensor = "S2.PE2.LI.B3")
+
+rh_S3_transformed <- data.frame("time" = ymd_hms(rh_S3$Time),
+                                "rh" = rh_S3$S2.PE2.LO.B1) %>%
+  mutate(rh = as.numeric(gsub("%", "", rh)),
+         sensor = "S2.PE2.LO.B1")
+
+rh_S4_transformed <- data.frame("time" = ymd_hms(rh_S4$Time),
+                                "rh" = rh_S4$S2.PE2.LO.B3) %>%
+  mutate(rh = as.numeric(gsub("%", "", rh)),
+         sensor = "S2.PE2.LO.B3")
+
+rh_S5_transformed <- data.frame("time" = ymd_hms(rh_S5$Time),
+                                "rh" = rh_S5$S2.PE2.LO.B5) %>%
+  mutate(rh = as.numeric(gsub("%", "", rh)),
+         sensor = "S2.PE2.LO.B5")
+
+merge.data.rh <- rbind(rh_S1_transformed, rh_S2_transformed, rh_S3_transformed, rh_S4_transformed, rh_S5_transformed)
+
+mean_rh <- mean(merge.data.rh$rh, na.rm = TRUE)
+sd_rh <- sd(merge.data.rh$rh, na.rm = TRUE)
